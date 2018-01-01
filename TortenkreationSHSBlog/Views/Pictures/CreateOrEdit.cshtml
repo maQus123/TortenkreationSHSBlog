@@ -1,0 +1,59 @@
+﻿@model TortenkreationSHSBlog.Models.PictureViewModel
+
+@{
+    if (Model.IsDirty()) {
+        //Edit
+        ViewData["Title"] = "Foto bearbeiten: " + Model.Title;
+        ViewData["Action"] = "Edit";
+    } else {
+        //Create
+        ViewData["Title"] = "Neues Foto";
+        ViewData["Action"] = "Create";
+    }
+}
+
+<div class="row">
+    <div class="col s12 m8 l8 offset-m2 offset-l2">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+</div>
+@if (!string.IsNullOrWhiteSpace(Model.ValidationMessage)) {
+    <div class="row">
+        <div class="col s12 m8 l8 offset-m2 offset-l2">
+            <p class="red-text darken-2">@Model.ValidationMessage</p>
+        </div>
+    </div>
+}
+<form method="post" asp-action="@ViewData["Action"]" asp-controller="Pictures" enctype="multipart/form-data">
+    <div class="row">
+        <div class="input-field col s12 m8 l8 offset-m2 offset-l2">
+            <input type="text" id="picture_title" name="Title" asp-for="@Model.Title" data-length="@Model.TitleLength" required>
+            <label for="title">Titel</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12 m8 l8 offset-m2 offset-l2">
+            <select asp-for="@Model.SelectedOccasion" asp-items="Html.GetEnumSelectList<Occasion>()" required>
+                <option selected="selected" disabled>Bitte wählen</option>
+            </select>
+            <label>Anlass</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field file-field col s12 m8 l8 offset-m2 offset-l2">
+            <div class="btn waves-effect waves-light pink lighten-2">
+                Foto
+                <input type="file" id="file" name="File" asp-for="@Model.File" required>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 l8 offset-m2 offset-l2">
+            <button class="btn waves-effect waves-light pink lighten-2" type="submit" name="action">Speichern</button>
+            <a class="btn waves-effect waves-light pink lighten-4" asp-route="list-pictures">Abbrechen</a>
+        </div>
+    </div>
+</form>

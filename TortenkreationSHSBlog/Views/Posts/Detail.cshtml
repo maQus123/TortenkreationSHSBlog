@@ -1,0 +1,11 @@
+﻿@model TortenkreationSHSBlog.Models.Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<br />
+<div>
+    @Html.Raw(Model.ContentAsHtml())
+</div>

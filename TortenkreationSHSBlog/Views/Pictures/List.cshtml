@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TortenkreationSHSBlog.Models.Picture>
+
+@{
+    ViewData["Title"] = "Tortengalerie";
+}
+
+<div class="row">
+    @foreach (var picture in Model) {
+        <div class="col s12 m6 l4">
+            <div class="card grey lighten-5">
+                <div class="card-image">
+                    <img src="/img/thumbnail/@picture.GetUrl()" alt="@picture.Title">
+                    <a class="btn-floating btn halfway-fab waves-effect waves-light pink lighten-2" asp-route="edit-picture" asp-route-id="@picture.Id"><i class="material-icons">edit</i></a>
+                </div>
+                <div class="card-content">
+                    <p class="truncate">@picture.Title</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="fixed-action-btn">
+    <a asp-route="create-picture" class="btn-floating btn-large waves-effect waves-light pink lighten-2">
+        <i class="large material-icons">add</i>
+    </a>
+</div>

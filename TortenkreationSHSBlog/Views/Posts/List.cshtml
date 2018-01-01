@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TortenkreationSHSBlog.Models.Post>
+
+@{
+    ViewData["Title"] = "Posts";
+    //<a asp-route="edit-post" asp-route-id="@post.Id">Edit</a>
+}
+
+<div class="row">
+    <div class="col">
+        @foreach (var post in Model) {
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">@post.Title</span>
+                </div>
+                <div class="card-action">
+                    <a asp-route="post-detail" asp-route-year="@post.CreatedAt.Year.ToString()" asp-route-month="@post.CreatedAt.Month.ToString("00")" asp-route-slug="@post.Slug()">Detail</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a asp-route="create-post" class="btn-floating btn-large waves-effect waves-light pink lighten-2">
+        <i class="large material-icons">add</i>
+    </a>
+</div>
