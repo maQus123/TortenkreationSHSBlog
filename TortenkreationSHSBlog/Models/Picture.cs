@@ -1,5 +1,6 @@
 ﻿namespace TortenkreationSHSBlog.Models {
-
+    using System;
+    using System.Globalization;
     using System.IO;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -61,6 +62,10 @@
                     }
                 }
             }
+        }
+
+        public string GetCreatedAtString() {
+            return this.CreatedAt.ToString(CultureInfo.InvariantCulture);
         }
 
         public void UpdateFrom(Picture picture) {

@@ -6,10 +6,10 @@
 
         public int Id { get; set; }
 
-        public DateTimeOffset CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public PersistentEntity() {
-            this.CreatedAt = new DateTimeOffset(DateTime.UtcNow);
+            this.CreatedAt = new DateTimeOffset(DateTime.Now);
         }
 
     }

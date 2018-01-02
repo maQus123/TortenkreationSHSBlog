@@ -13,7 +13,7 @@
                     <a class="btn-floating btn halfway-fab waves-effect waves-light pink lighten-2" asp-route="edit-picture" asp-route-id="@picture.Id"><i class="material-icons">edit</i></a>
                 </div>
                 <div class="card-content">
-                    <p class="truncate">@picture.Title</p>
+                    <p class="truncate">@picture.Title (Created: @picture.GetCreatedAtString())</p>
                 </div>
             </div>
         </div>

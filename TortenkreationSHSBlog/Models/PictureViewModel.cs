@@ -1,6 +1,7 @@
 ﻿namespace TortenkreationSHSBlog.Models {
 
     using Microsoft.AspNetCore.Http;
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Linq;
@@ -9,11 +10,11 @@
 
         private readonly int MAX_BYTES = 5 * 1024 * 1024; //5MB
         private readonly string[] ACCEPTED_FILE_TYPES = new[] { ".jpg", ".jpeg", ".png", ".tif", ".bmp" };
-        private readonly int TITLE_LENGTH = 50;
 
         public int Id { get; set; }
 
         [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
 
         public int TitleLength { get; set; }
@@ -26,14 +27,18 @@
 
         public string ValidationMessage { get; set; }
 
+        public DateTimeOffset CreatedAt { get; set; }
+
         public PictureViewModel() {
-            this.TitleLength = TITLE_LENGTH;
+            this.TitleLength = 50;
+            this.CreatedAt = new DateTimeOffset(DateTime.UtcNow);
         }
 
         public PictureViewModel(Picture picture) : this() {
             this.Id = picture.Id;
             this.Title = picture.Title;
             this.SelectedOccasion = picture.Occasion;
+            this.CreatedAt = picture.CreatedAt;
         }
 
         public byte[] GetFileAsByteArray() {
@@ -53,7 +58,7 @@
                 this.ValidationMessage = "Ungültiges Dateiformat. Erlaubt sind nur JPG, PNG, BMP und GIF.";
                 isValid = false;
             } else if (file.Length > this.MAX_BYTES) {
-                this.ValidationMessage = "Ungültige Dateigröße. Foto darf nicht größer als 5MB sein.";
+                this.ValidationMessage = "Datei zu groß. Foto darf nicht größer als 5MB sein.";
                 isValid = false;
             }
             return isValid;
@@ -62,7 +67,7 @@
         public bool IsDirty() {
             var dirty = false;
             if (this.Id != 0) {
-                //Id has been given by back-end -> Edit view
+                //Id has been given by back-end
                 dirty = true;
             }
             return dirty;
