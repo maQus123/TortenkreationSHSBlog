@@ -9,7 +9,7 @@
 
         private readonly int MAX_BYTES = 5 * 1024 * 1024; //5MB
         private readonly string[] ACCEPTED_FILE_TYPES = new[] { ".jpg", ".jpeg", ".png", ".tif", ".bmp" };
-        private readonly int TITLE_LENGTH = 30;
+        private readonly int TITLE_LENGTH = 50;
 
         public int Id { get; set; }
 
