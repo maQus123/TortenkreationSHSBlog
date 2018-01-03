@@ -1,5 +1,5 @@
 ﻿namespace TortenkreationSHSBlog.Models {
-    using System;
+
     using System.Globalization;
     using System.IO;
     using System.Net.Http;
@@ -9,8 +9,8 @@
 
     public class Picture : PersistentEntity {
 
-        private readonly int THUMBNAIL_WIDTH = 400;
-        private readonly int THUMBNAIL_HEIGHT = 300;
+        public readonly int ThumbnailWidth = 400;
+        public readonly int ThumbnailHeight = 300;
 
         public string Title { get; set; }
 
@@ -49,7 +49,7 @@
         }
 
         public async Task GenerateThumbnail(string apiKey) {
-            var url = $@"https://westeurope.api.cognitive.microsoft.com/vision/v1.0/generateThumbnail?width={THUMBNAIL_WIDTH}&height={THUMBNAIL_HEIGHT}&smartCropping=true";
+            var url = $@"https://westeurope.api.cognitive.microsoft.com/vision/v1.0/generateThumbnail?width={ThumbnailWidth}&height={ThumbnailHeight}&smartCropping=true";
             using (HttpClient client = new HttpClient()) {
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
                 using (ByteArrayContent content = new ByteArrayContent(this.File)) {
