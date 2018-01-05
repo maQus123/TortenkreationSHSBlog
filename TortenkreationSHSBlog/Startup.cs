@@ -62,16 +62,20 @@
                 //Pictures routes
                 routes.MapRoute(
                     name: "list-pictures",
-                    template: "torten",
+                    template: "torten/{occasion?}",
                     defaults: new { controller = "Pictures", action = "List" });
                 routes.MapRoute(
                     name: "create-picture",
-                    template: "torten/create-picture",
+                    template: "torten/new/picture",
                     defaults: new { controller = "Pictures", action = "Create" });
                 routes.MapRoute(
                     name: "edit-picture",
                     template: "torten/edit-picture/{id:int}",
                     defaults: new { controller = "Pictures", action = "Edit" });
+                routes.MapRoute(
+                    name: "delete-picture",
+                    template: "torten/delete-picture/{id:int}",
+                    defaults: new { controller = "Pictures", action = "Delete" });
                 routes.MapRoute(
                     name: "picture-detail",
                     template: "img/detail/{pictureUrl}",

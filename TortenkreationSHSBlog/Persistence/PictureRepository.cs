@@ -21,12 +21,19 @@
             return;
         }
 
-        public Task Delete(Picture picture) {
-            throw new NotImplementedException();
+        public async Task Delete(Picture picture) {
+            this.dataContext.Remove(picture);
+            await this.dataContext.SaveChangesAsync();
+            return;
         }
 
         public async Task<IEnumerable<Picture>> GetAll() {
             var pictures = await this.dataContext.Pictures.OrderByDescending(p => p.CreatedAt).ToListAsync();
+            return pictures;
+        }
+
+        public async Task<IEnumerable<Picture>> GetMultipleByOccasion(string occasion) {
+            var pictures = await this.dataContext.Pictures.Where(p => p.Occasion.ToString() == occasion).OrderByDescending(p => p.CreatedAt).ToListAsync();
             return pictures;
         }
 
