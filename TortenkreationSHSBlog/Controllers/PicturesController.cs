@@ -1,9 +1,9 @@
 ﻿namespace TortenkreationSHSBlog.Controllers {
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using TortenkreationSHSBlog.Models;
     using TortenkreationSHSBlog.Persistence;
@@ -19,6 +19,7 @@
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Create() {
             var pictureViewModel = new PictureViewModel();
             return View("CreateOrEdit", pictureViewModel);
@@ -26,6 +27,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(PictureViewModel pictureViewModel) {
             try {
                 if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
@@ -47,6 +49,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Delete(int id, PictureViewModel pictureViewModel) {
             try {
                 var picture = await this.pictureRepository.GetById(id);
@@ -63,6 +66,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Detail(string pictureUrl) {
             var picture = await this.pictureRepository.GetByUrl(pictureUrl);
             if (null == picture) {
@@ -72,6 +76,7 @@
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int id) {
             var picture = await this.pictureRepository.GetById(id);
             if (null == picture) {
@@ -83,6 +88,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, PictureViewModel pictureViewModel) {
             try {
                 if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
@@ -109,12 +115,14 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> List() {
             var pictures = await this.pictureRepository.GetAll();
             return View(pictures);
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Thumbnail(string pictureUrl) {
             var picture = await this.pictureRepository.GetByUrl(pictureUrl);
             if (null == picture) {

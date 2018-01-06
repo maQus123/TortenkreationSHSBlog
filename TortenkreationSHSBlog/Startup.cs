@@ -1,5 +1,5 @@
 ﻿namespace TortenkreationSHSBlog {
-
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Routing;
@@ -17,6 +17,10 @@
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                    options.LoginPath = "/login/";
+                });
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase("Database"));
@@ -26,6 +30,7 @@
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+            app.UseAuthentication();
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
@@ -86,6 +91,16 @@
                     template: "img/thumbnail/{pictureUrl}",
                     constraints: new { pictureUrl = @"^[a-z0-9-.]+$" },
                     defaults: new { controller = "Pictures", action = "Thumbnail" });
+                //Auth
+                routes.MapRoute(
+                    name: "login",
+                    template: "login",
+                    defaults: new { controller = "Auth", action = "Login" });
+                //Auth
+                routes.MapRoute(
+                    name: "admin",
+                    template: "admin",
+                    defaults: new { controller = "Admin", action = "Index" });
             });
         }
 

@@ -1,5 +1,6 @@
 ﻿namespace TortenkreationSHSBlog.Controllers {
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : Controller {
@@ -9,11 +10,13 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index() {
             return View();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult AboutMe() {
             return View();
         }
