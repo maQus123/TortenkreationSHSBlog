@@ -32,8 +32,8 @@
             return pictures;
         }
 
-        public async Task<IEnumerable<Picture>> GetMultipleByOccasion(string occasion) {
-            var pictures = await this.dataContext.Pictures.Where(p => p.Occasion.ToString() == occasion).OrderByDescending(p => p.CreatedAt).ToListAsync();
+        public async Task<IEnumerable<Picture>> GetMultipleByOccasion(Occasion occasion) {
+            var pictures = await this.dataContext.Pictures.Where(p => p.Occasion == occasion).OrderByDescending(p => p.CreatedAt).ToListAsync();
             return pictures;
         }
 

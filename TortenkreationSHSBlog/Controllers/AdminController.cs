@@ -12,19 +12,15 @@
             //nothing to do
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, Authorize]
         public IActionResult Index() {
             return View();
         }
 
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout() {
-            //TODO Kommt hier nie an :(
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(string logout = null) {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToRoute("default");
+            return Redirect("/");
         }
 
     }

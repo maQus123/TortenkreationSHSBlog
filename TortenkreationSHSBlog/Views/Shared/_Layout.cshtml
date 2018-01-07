@@ -31,7 +31,7 @@
                 <li><a asp-route="list-pictures" class="white-text">Tortengalerie</a></li>
                 <li><a asp-route="about-me" class="white-text">Über mich</a></li>
                 @if (User.Identity.IsAuthenticated) {
-                    <li><a asp-route="admin" class="white-text">Admin</a></li>
+                    <li><a asp-route="admin" class="white-text">Verwaltung</a></li>
                 }
             </ul>
             <ul id="nav-mobile" class="sidenav">
@@ -40,7 +40,7 @@
                 <li><a asp-route="list-pictures" class="grey-text text-darken-1 waves-effect">Tortengalerie</a></li>
                 <li><a asp-route="about-me" class="grey-text text-darken-1 waves-effect">Über mich</a></li>
                 @if (User.Identity.IsAuthenticated) {
-                    <li><a asp-route="admin" class="grey-text text-darken-1 waves-effect">Admin</a></li>
+                    <li><a asp-route="admin" class="grey-text text-darken-1 waves-effect">Verwaltung</a></li>
                 }
             </ul>
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -65,10 +65,10 @@
                         <li><a class="grey-text text-lighten-3" asp-route="list-posts">Blog</a></li>
                         <li><a class="grey-text text-lighten-3" asp-route="list-pictures">Tortengalerie</a></li>
                         <li><a class="grey-text text-lighten-3" asp-route="about-me">Über mich</a></li>
-                        @if (!User.Identity.IsAuthenticated) {
-                            <li><a class="grey-text text-lighten-3" asp-route="login">Login</a></li>
+                        @if (User.Identity.IsAuthenticated) {
+                            <li><a class="grey-text text-lighten-3" asp-route="admin">Verwaltung</a></li>
                         } else {
-                            <li><a class="grey-text text-lighten-3" asp-route="admin">Admin</a></li>
+                            <li><a class="grey-text text-lighten-3" asp-route="login">Login</a></li>
                         }
                     </ul>
                 </div>

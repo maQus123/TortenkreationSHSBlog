@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Administration";
+    ViewData["Title"] = "Verwaltung";
 }
 
 <br /><br />
 <div class="row col center">
-    <form method="post">
-        <button class="btn btn-large waves-effect waves-light pink lighten-2" type="submit" value="Logout">Logout</button>
+    <form method="post" asp-controller="Admin" asp-action="Logout" id="logoutForm">
+        <input class="btn btn-large waves-effect waves-light pink lighten-2" type="submit" value="Logout" />
     </form>
 </div>

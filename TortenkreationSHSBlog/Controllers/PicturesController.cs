@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using TortenkreationSHSBlog.Models;
     using TortenkreationSHSBlog.Persistence;
@@ -18,16 +19,13 @@
             this.appSettings = appSettings.Value;
         }
 
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public IActionResult Create() {
             var pictureViewModel = new PictureViewModel();
             return View("CreateOrEdit", pictureViewModel);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PictureViewModel pictureViewModel) {
             try {
                 if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
@@ -47,9 +45,7 @@
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, PictureViewModel pictureViewModel) {
             try {
                 var picture = await this.pictureRepository.GetById(id);
@@ -65,8 +61,7 @@
             }
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Detail(string pictureUrl) {
             var picture = await this.pictureRepository.GetByUrl(pictureUrl);
             if (null == picture) {
@@ -75,8 +70,7 @@
             return File(picture.File, picture.ContentType);
         }
 
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public async Task<IActionResult> Edit(int id) {
             var picture = await this.pictureRepository.GetById(id);
             if (null == picture) {
@@ -86,9 +80,7 @@
             return View("CreateOrEdit", pictureViewModel);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, PictureViewModel pictureViewModel) {
             try {
                 if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
@@ -114,15 +106,23 @@
             }
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> List() {
-            var pictures = await this.pictureRepository.GetAll();
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> List(string anlass = null) {
+            IEnumerable<Picture> pictures;
+            if (string.IsNullOrWhiteSpace(anlass)) {
+                pictures = await this.pictureRepository.GetAll();
+            } else {
+                Occasion occasion;
+                if (Enum.TryParse(anlass, true, out occasion)) {
+                    pictures = await this.pictureRepository.GetMultipleByOccasion(occasion);
+                } else {
+                    return BadRequest();
+                }
+            }
             return View(pictures);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Thumbnail(string pictureUrl) {
             var picture = await this.pictureRepository.GetByUrl(pictureUrl);
             if (null == picture) {

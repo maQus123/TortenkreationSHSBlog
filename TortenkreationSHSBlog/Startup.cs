@@ -37,6 +37,11 @@
             }
             app.UseStaticFiles();
             app.UseMvc(routes => {
+                //Admin
+                routes.MapRoute(
+                    name: "admin",
+                    template: "admin",
+                    defaults: new { controller = "Admin", action = "Index" });
                 //Home routes
                 routes.MapRoute(
                     name: "home",
@@ -46,6 +51,10 @@
                     name: "about-me",
                     template: "ueber-mich",
                     defaults: new { controller = "Home", action = "AboutMe" });
+                routes.MapRoute(
+                    name: "login",
+                    template: "login",
+                    defaults: new { controller = "Home", action = "Login" });
                 //Posts routes
                 routes.MapRoute(
                     name: "list-posts",
@@ -67,7 +76,7 @@
                 //Pictures routes
                 routes.MapRoute(
                     name: "list-pictures",
-                    template: "torten/{occasion?}",
+                    template: "torten/",
                     defaults: new { controller = "Pictures", action = "List" });
                 routes.MapRoute(
                     name: "create-picture",
@@ -91,16 +100,6 @@
                     template: "img/thumbnail/{pictureUrl}",
                     constraints: new { pictureUrl = @"^[a-z0-9-.]+$" },
                     defaults: new { controller = "Pictures", action = "Thumbnail" });
-                //Auth
-                routes.MapRoute(
-                    name: "login",
-                    template: "login",
-                    defaults: new { controller = "Auth", action = "Login" });
-                //Auth
-                routes.MapRoute(
-                    name: "admin",
-                    template: "admin",
-                    defaults: new { controller = "Admin", action = "Index" });
             });
         }
 
