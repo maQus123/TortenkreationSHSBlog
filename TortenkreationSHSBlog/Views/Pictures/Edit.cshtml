@@ -1,0 +1,36 @@
+﻿@model TortenkreationSHSBlog.Models.EditPictureViewModel
+
+@{
+    ViewData["Title"] = "Foto '" + Model.Title + "' bearbeiten";
+}
+
+<br />
+<div class="row">
+    <div class="col s12 m8 l8 offset-m2 offset-l2">
+        <img src="@Model.ThumbnailUrl" alt="@Model.Title" width="200">
+    </div>
+</div>
+<form method="post" asp-action="Edit" asp-controller="Pictures">
+    <div class="row">
+        <div class="input-field col s12 m8 l8 offset-m2 offset-l2">
+            <input type="text" asp-for="@Model.Title" data-length="50" required>
+            <label for="title">Titel</label>
+            <span asp-validation-for="@Model.Title"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12 m8 l8 offset-m2 offset-l2">
+            <select asp-for="@Model.Occasion" asp-items="Html.GetEnumSelectList<Occasion>()" required>
+                <option selected="selected" disabled>Bitte wählen</option>
+            </select>
+            <label>Anlass</label>
+            <span asp-validation-for="@Model.Occasion"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 l8 offset-m2 offset-l2">
+            <button class="btn waves-effect waves-light pink lighten-1" type="submit" name="action">Speichern</button>
+            <a class="btn waves-effect waves-light pink lighten-2" asp-route="list-pictures">Abbrechen</a>
+        </div>
+    </div>
+</form>

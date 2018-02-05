@@ -3,20 +3,21 @@
 @{
     ViewData["Title"] = "Tortengalerie";
 }
-<div class="row torten">
+<br />
+<div class="row">
     @foreach (var picture in Model) {
         <div class="col s12 m6 l4">
             <div class="card grey lighten-5">
-                <div class="card-image torte">
-                    <a id="btn" href="/img/detail/@picture.GetUrl()">
-                        <img src="/img/thumbnail/@picture.GetUrl()" alt="@picture.Title" width="@picture.ThumbnailWidth" height="@picture.ThumbnailHeight" />
+                <div class="card-image">
+                    <a href="/img/detail/@picture.GetUrl()">
+                        <img src="/img/thumbnail/@picture.GetUrl()" alt="@picture.Title" />
                     </a>
                     @if (User.Identity.IsAuthenticated) {
                         <a class="btn-floating btn halfway-fab waves-effect waves-light pink lighten-2" asp-route="edit-picture" asp-route-id="@picture.Id"><i class="material-icons">edit</i></a>
                     }
                 </div>
                 <div class="card-content">
-                    <p class="truncate">@picture.Title (Created: @picture.GetCreatedAtString())</p>
+                    <p class="truncate">@picture.Title</p>
                 </div>
             </div>
         </div>
@@ -29,33 +30,3 @@
         </a>
     </div>
 }
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="pswp__bg"></div>
-    <div class="pswp__scroll-wrap">
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-        <div class="pswp__ui pswp__ui--hidden">
-            <div class="pswp__top-bar">
-                <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-        </div>
-    </div>
-</div>

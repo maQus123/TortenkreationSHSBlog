@@ -10,15 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="~/css/materialize.min.css" rel="stylesheet">
-    <link href="~/css/photoswipe.css" rel="stylesheet">
-    <link href="~/css/default-skin/default-skin.css" rel="stylesheet">
-    <link href="~/css/simplemde.min.css" rel="stylesheet">
     <link href="~/css/styles.css" rel="stylesheet">
     <script src="~/js/jquery.min.js" type="text/javascript"></script>
     <script src="~/js/materialize.min.js" type="text/javascript"></script>
-    <script src="~/js/photoswipe.min.js" type="text/javascript"></script>
-    <script src="~/js/photoswipe-ui-default.min.js" type="text/javascript"></script>
-    <script src="~/js/simplemde.min.js" type="text/javascript"></script>
     <script src="~/js/scripts.js" type="text/javascript"></script>
 </head>
 <body>
@@ -27,7 +21,6 @@
             <a id="logo-container" asp-route="home" class="brand-logo white-text thin">Tortenkreation</a>
             <ul class="right hide-on-med-and-down">
                 <li><a asp-route="home" class="white-text">Home</a></li>
-                <li><a asp-route="list-posts" class="white-text">Blog</a></li>
                 <li><a asp-route="list-pictures" class="white-text">Tortengalerie</a></li>
                 <li><a asp-route="about-me" class="white-text">Über mich</a></li>
                 @if (User.Identity.IsAuthenticated) {
@@ -36,7 +29,6 @@
             </ul>
             <ul id="nav-mobile" class="sidenav">
                 <li><a asp-route="home" class="grey-text text-darken-1 waves-effect">Home</a></li>
-                <li><a asp-route="list-posts" class="grey-text text-darken-1 waves-effect">Blog</a></li>
                 <li><a asp-route="list-pictures" class="grey-text text-darken-1 waves-effect">Tortengalerie</a></li>
                 <li><a asp-route="about-me" class="grey-text text-darken-1 waves-effect">Über mich</a></li>
                 @if (User.Identity.IsAuthenticated) {
@@ -46,38 +38,37 @@
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
     </nav>
-    <main>
-        <div class="container">
-            @RenderBody()
-        </div>
-    </main>
-    <footer class="page-footer pink lighten-3">
+    @RenderBody()
+    <footer class="page-footer teal">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
-                    <h5 class="white-text">Tortenkreation SHS</h5>
-                    <p class="grey-text text-lighten-4">Individuelle Tortengestaltung aus Schloß Holte-Stukenbrock.</p>
+                    <h5 class="white-text">Company Bio</h5>
+                    <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
                 </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Links</h5>
+                <div class="col l3 s12">
+                    <h5 class="white-text">Settings</h5>
                     <ul>
-                        <li><a class="grey-text text-lighten-3" asp-route="home">Home</a></li>
-                        <li><a class="grey-text text-lighten-3" asp-route="list-posts">Blog</a></li>
-                        <li><a class="grey-text text-lighten-3" asp-route="list-pictures">Tortengalerie</a></li>
-                        <li><a class="grey-text text-lighten-3" asp-route="about-me">Über mich</a></li>
-                        @if (User.Identity.IsAuthenticated) {
-                            <li><a class="grey-text text-lighten-3" asp-route="admin">Verwaltung</a></li>
-                        } else {
-                            <li><a class="grey-text text-lighten-3" asp-route="login">Login</a></li>
-                        }
+                        <li><a class="white-text" href="#!">Link 1</a></li>
+                        <li><a class="white-text" href="#!">Link 2</a></li>
+                        <li><a class="white-text" href="#!">Link 3</a></li>
+                        <li><a class="white-text" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+                <div class="col l3 s12">
+                    <h5 class="white-text">Connect</h5>
+                    <ul>
+                        <li><a class="white-text" href="#!">Link 1</a></li>
+                        <li><a class="white-text" href="#!">Link 2</a></li>
+                        <li><a class="white-text" href="#!">Link 3</a></li>
+                        <li><a class="white-text" href="#!">Link 4</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2017 Copyright Tortenkreation SHS
-                <a class="btn-floating btn-flat waves-effect waves-light right" href="#" title="Zum Anfang"><i class="material-icons">keyboard_arrow_up</i></a>
+                © 2018 Copyright Tortenkreation SHS
             </div>
         </div>
     </footer>

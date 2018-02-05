@@ -5,6 +5,8 @@
     using Microsoft.Extensions.Options;
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using TortenkreationSHSBlog.Models;
     using TortenkreationSHSBlog.Persistence;
@@ -13,6 +15,8 @@
 
         private readonly IPictureRepository pictureRepository;
         private readonly AppConfiguration appSettings;
+        private readonly int MAX_BYTES = 5 * 1024 * 1024; //5MB
+        private readonly string[] ACCEPTED_FILE_TYPES = new[] { ".jpg", ".jpeg", ".png", ".tif", ".bmp" };
 
         public PicturesController(IPictureRepository pictureRepository, IOptions<AppConfiguration> appSettings) : base() {
             this.pictureRepository = pictureRepository;
@@ -21,44 +25,35 @@
 
         [HttpGet, Authorize]
         public IActionResult Create() {
-            var pictureViewModel = new PictureViewModel();
-            return View("CreateOrEdit", pictureViewModel);
+            var pictureViewModel = new CreatePictureViewModel();
+            return View(pictureViewModel);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PictureViewModel pictureViewModel) {
-            try {
-                if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                if (await this.pictureRepository.IsTitleExisting(pictureViewModel.Title)) {
-                    pictureViewModel.ValidationMessage = "Titel schon vorhanden.";
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                var picture = new Picture(pictureViewModel);
-                await picture.GenerateThumbnail(appSettings.ApiKey);
-                await this.pictureRepository.Add(picture);
-                return RedirectToAction("List");
-            } catch (Exception ex) {
-                pictureViewModel.ValidationMessage = ex.Message;
-                return View("CreateOrEdit", pictureViewModel);
+        public async Task<IActionResult> Create(CreatePictureViewModel viewModel) {
+            if (!ModelState.IsValid) {
+                return View(viewModel);
             }
-        }
-
-        [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, PictureViewModel pictureViewModel) {
-            try {
-                var picture = await this.pictureRepository.GetById(id);
-                if (null == picture || picture.Id != id) {
-                    pictureViewModel.ValidationMessage = "Serverfehler. Bestehendes Foto nicht vorhanden.";
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                await this.pictureRepository.Delete(picture);
-                return RedirectToAction("List");
-            } catch (Exception ex) {
-                pictureViewModel.ValidationMessage = ex.Message;
-                return View("CreateOrEdit", pictureViewModel);
+            if (viewModel.File == null || viewModel.File?.Length == 0) {
+                ModelState.AddModelError("File", "Foto ungültig/leer.");
+                return View(viewModel);
             }
+            if (!this.ACCEPTED_FILE_TYPES.Any(s => s == Path.GetExtension(viewModel.File.FileName).ToLower())) {
+                ModelState.AddModelError("File", "Foto-Dateiformat nicht erlaubt (nur JPG, PNG, BMP oder GIF).");
+                return View(viewModel);
+            }
+            if (viewModel.File.Length > this.MAX_BYTES) {
+                ModelState.AddModelError("File", "Foto darf nicht größer als 5MB sein.");
+                return View(viewModel);
+            }
+            if (await this.pictureRepository.IsTitleExisting(viewModel.Title)) {
+                ModelState.AddModelError("Title", "Titel bereits vergeben.");
+                return View(viewModel);
+            }
+            var picture = new Picture(viewModel);
+            await picture.GenerateThumbnail(appSettings.ApiKey);
+            await this.pictureRepository.Add(picture);
+            return RedirectToAction("List");
         }
 
         [HttpGet, AllowAnonymous]
@@ -76,34 +71,26 @@
             if (null == picture) {
                 return NotFound();
             }
-            var pictureViewModel = new PictureViewModel(picture);
-            return View("CreateOrEdit", pictureViewModel);
+            var viewModel = new EditPictureViewModel(picture);
+            return View(viewModel);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PictureViewModel pictureViewModel) {
-            try {
-                if (!ModelState.IsValid || !pictureViewModel.IsFileValid()) {
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                var existingPicture = await this.pictureRepository.GetById(id);
-                if (null == existingPicture || existingPicture.Id != id) {
-                    pictureViewModel.ValidationMessage = "Serverfehler. Bestehendes Foto nicht vorhanden.";
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                if ((pictureViewModel.Title != existingPicture.Title) && (await this.pictureRepository.IsTitleExisting(pictureViewModel.Title))) {
-                    pictureViewModel.ValidationMessage = "Titel schon vorhanden.";
-                    return View("CreateOrEdit", pictureViewModel);
-                }
-                var picture = new Picture(pictureViewModel);
-                await picture.GenerateThumbnail(appSettings.ApiKey);
-                existingPicture.UpdateFrom(picture);
-                await this.pictureRepository.Update(existingPicture);
-                return RedirectToAction("List");
-            } catch (Exception ex) {
-                pictureViewModel.ValidationMessage = ex.Message;
-                return View("CreateOrEdit", pictureViewModel);
+        public async Task<IActionResult> Edit(int id, EditPictureViewModel viewModel) {
+            if (!ModelState.IsValid) {
+                return View(viewModel);
             }
+            var picture = await this.pictureRepository.GetById(id);
+            if (null == picture || picture?.Id != id) {
+                return NotFound();
+            }
+            if (viewModel.Title != picture.Title && await this.pictureRepository.IsTitleExisting(viewModel.Title)) {
+                ModelState.AddModelError("Title", "Titel bereits vergeben.");
+                return View(viewModel);
+            }
+            picture.UpdateFrom(viewModel);
+            await this.pictureRepository.Update(picture);
+            return RedirectToAction("List");
         }
 
         [HttpGet, AllowAnonymous]

@@ -5,8 +5,6 @@
 
     public class DataContext : DbContext {
 
-        public DbSet<Post> Posts { get; set; }
-
         public DbSet<Picture> Pictures { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) {

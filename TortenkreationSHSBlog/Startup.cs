@@ -1,4 +1,5 @@
 ﻿namespace TortenkreationSHSBlog {
+
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -21,7 +22,6 @@
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
                     options.LoginPath = "/login/";
                 });
-            services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase("Database"));
             services.AddMvc();
@@ -55,24 +55,6 @@
                     name: "login",
                     template: "login",
                     defaults: new { controller = "Home", action = "Login" });
-                //Posts routes
-                routes.MapRoute(
-                    name: "list-posts",
-                    template: "blog",
-                    defaults: new { controller = "Posts", action = "List" });
-                routes.MapRoute(
-                    name: "post-detail",
-                    template: "{year}/{month}/{slug}",
-                    constraints: new { year = @"\d{4}", month = @"\d{2}", slug = @"^[a-z0-9-]+$" },
-                    defaults: new { controller = "Posts", action = "Detail" });
-                routes.MapRoute(
-                    name: "create-post",
-                    template: "blog/create-post",
-                    defaults: new { controller = "Posts", action = "Create" });
-                routes.MapRoute(
-                    name: "edit-post",
-                    template: "blog/edit-post/{id:int}",
-                    defaults: new { controller = "Posts", action = "Edit" });
                 //Pictures routes
                 routes.MapRoute(
                     name: "list-pictures",
