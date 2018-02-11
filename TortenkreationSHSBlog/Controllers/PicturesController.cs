@@ -56,6 +56,26 @@
             return RedirectToAction("List");
         }
 
+        [HttpGet, Authorize]
+        public async Task<IActionResult> Delete(int id) {
+            var picture = await this.pictureRepository.GetById(id);
+            if (null == picture) {
+                return NotFound();
+            }
+            var viewModel = new EditPictureViewModel(picture);
+            return View(viewModel);
+        }
+
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, EditPictureViewModel viewModel) {
+            var picture = await this.pictureRepository.GetById(id);
+            if (null == picture || picture?.Id != id) {
+                return NotFound();
+            }
+            await this.pictureRepository.Delete(picture);
+            return RedirectToAction("List");
+        }
+
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Detail(string pictureUrl) {
             var picture = await this.pictureRepository.GetByUrl(pictureUrl);
@@ -94,19 +114,9 @@
         }
 
         [HttpGet, AllowAnonymous]
-        public async Task<IActionResult> List(string anlass = null) {
-            IEnumerable<Picture> pictures;
-            if (string.IsNullOrWhiteSpace(anlass)) {
-                pictures = await this.pictureRepository.GetAll();
-            } else {
-                Occasion occasion;
-                if (Enum.TryParse(anlass, true, out occasion)) {
-                    pictures = await this.pictureRepository.GetMultipleByOccasion(occasion);
-                } else {
-                    return BadRequest();
-                }
-            }
-            return View(pictures);
+        public async Task<IActionResult> List(ListViewModel viewModel) {
+            viewModel.Pictures = await this.pictureRepository.GetAll(User.Identity.IsAuthenticated, viewModel.Occasion);
+            return View(viewModel);
         }
 
         [HttpGet, AllowAnonymous]

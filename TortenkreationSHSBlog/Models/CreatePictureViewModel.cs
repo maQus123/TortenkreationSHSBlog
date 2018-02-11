@@ -18,6 +18,8 @@
 
         public DateTimeOffset CreatedAt { get; set; }
 
+        public bool IsPublished { get; set; }
+
         public CreatePictureViewModel() {
             this.CreatedAt = new DateTimeOffset(DateTime.UtcNow);
         }

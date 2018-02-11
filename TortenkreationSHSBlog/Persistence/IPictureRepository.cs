@@ -6,8 +6,7 @@
 
     public interface IPictureRepository {
 
-        Task<IEnumerable<Picture>> GetAll();
-        Task<IEnumerable<Picture>> GetMultipleByOccasion(Occasion occasion);
+        Task<IEnumerable<Picture>> GetAll(bool showUnpublished, Occasion? occasion);
         Task<Picture> GetByUrl(string pictureUrl);
         Task<Picture> GetById(int id);
         Task Add(Picture picture);

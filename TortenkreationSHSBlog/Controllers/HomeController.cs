@@ -35,8 +35,9 @@
 
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(User user) {
-            //var currentUser = this.Users.Where(u => u.Username == user.Username).FirstOrDefault();
-            //if (currentUser?.Password == user.Password) {
+            if(!ModelState.IsValid) {
+                return View(user);
+            }
             if (this.appSettings.Username == user.Username && this.appSettings.Password == user.Password) {
                 var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, user.Username)
@@ -45,8 +46,11 @@
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 return Redirect("/");
-            }
-            return View();
+            } else {
+                ModelState.AddModelError("Username", "Name und/oder Passwort nicht korrekt.");
+                ModelState.AddModelError("Password", "Name und/oder Passwort nicht korrekt.");
+                return View(user);
+            }            
         }
 
     }

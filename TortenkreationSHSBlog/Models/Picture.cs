@@ -28,6 +28,8 @@
 
         public Occasion Occasion { get; set; }
 
+        public bool IsPublished { get; set; }
+
         public Picture() {
             this.CreatedAt = new DateTimeOffset(DateTime.Now);
         }
@@ -38,6 +40,7 @@
             this.ContentType = pictureViewModel.File.ContentType;
             this.Extension = Path.GetExtension(pictureViewModel.File.FileName);
             this.File = pictureViewModel.GetFileAsByteArray();
+            this.IsPublished = pictureViewModel.IsPublished;
         }
 
         public string GetUrl() {
@@ -71,6 +74,7 @@
         public void UpdateFrom(EditPictureViewModel picture) {
             this.Title = picture.Title;
             this.Occasion = picture.Occasion;
+            this.IsPublished = picture.IsPublished;
             return;
         }
 

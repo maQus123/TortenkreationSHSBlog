@@ -58,11 +58,11 @@
                 //Pictures routes
                 routes.MapRoute(
                     name: "list-pictures",
-                    template: "torten/",
+                    template: "torten",
                     defaults: new { controller = "Pictures", action = "List" });
                 routes.MapRoute(
                     name: "create-picture",
-                    template: "torten/new/picture",
+                    template: "torten/create-picture",
                     defaults: new { controller = "Pictures", action = "Create" });
                 routes.MapRoute(
                     name: "edit-picture",

@@ -15,6 +15,7 @@
             this.Occasion = picture.Occasion;
             this.CreatedAt = picture.CreatedAt;
             this.ThumbnailUrl = "/img/thumbnail/" + picture.GetUrl();
+            this.IsPublished = picture.IsPublished;
         }
 
         public int Id { get; set; }
@@ -28,7 +29,9 @@
         public DateTimeOffset CreatedAt { get; set; }
 
         public string ThumbnailUrl { get; set; }
-        
+
+        public bool IsPublished { get; set; }
+
     }
 
 }

@@ -27,13 +27,16 @@
             return;
         }
 
-        public async Task<IEnumerable<Picture>> GetAll() {
-            var pictures = await this.dataContext.Pictures.OrderByDescending(p => p.CreatedAt).ToListAsync();
-            return pictures;
-        }
-
-        public async Task<IEnumerable<Picture>> GetMultipleByOccasion(Occasion occasion) {
-            var pictures = await this.dataContext.Pictures.Where(p => p.Occasion == occasion).OrderByDescending(p => p.CreatedAt).ToListAsync();
+        public async Task<IEnumerable<Picture>> GetAll(bool showUnpublished, Occasion? occasion) {
+            IEnumerable<Picture> pictures;
+            if (null != occasion) {
+                pictures = await this.dataContext.Pictures.Where(p => p.Occasion == occasion).OrderByDescending(p => p.CreatedAt).ToListAsync();
+            } else {
+                pictures = await this.dataContext.Pictures.OrderByDescending(p => p.CreatedAt).ToListAsync();
+            }
+            if (!showUnpublished) {
+                pictures = pictures.Where(p => p.IsPublished == true).OrderByDescending(p => p.CreatedAt).ToList();
+            }
             return pictures;
         }
 

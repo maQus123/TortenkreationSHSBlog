@@ -1,0 +1,25 @@
+﻿@model TortenkreationSHSBlog.Models.EditPictureViewModel
+
+@{
+    ViewData["Title"] = "Foto '" + Model.Title + "' löschen";
+}
+
+<br />
+<div class="row">
+    <div class="col s12 m8 l8 offset-m2 offset-l2">
+        <img src="@Model.ThumbnailUrl" alt="@Model.Title" width="200">
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m8 l8 offset-m2 offset-l2">
+        Foto wirklich löschen?
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m8 l8 offset-m2 offset-l2">
+        <form method="post" asp-action="Delete" asp-controller="Pictures">
+            <button class="btn waves-effect waves-light pink" type="submit" name="action">Löschen</button>
+            <a class="btn waves-effect waves-light pink lighten-1" asp-route="edit-picture" asp-route-id="@Model.Id">Abbrechen</a>
+        </form>
+    </div>
+</div>
